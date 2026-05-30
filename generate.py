@@ -269,8 +269,7 @@ def timeline_generieren(jahresordner):
 
     .card img {{
       width: 100%;
-      height: 230px;
-      object-fit: cover;
+      height: auto;
       display: block;
       background: rgba(255,255,255,.08);
     }}
@@ -326,10 +325,6 @@ def timeline_generieren(jahresordner):
 
       .dot {{
         margin-left: 4px;
-      }}
-
-      .card img {{
-        height: 270px;
       }}
     }}
   </style>
