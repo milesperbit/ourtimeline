@@ -170,6 +170,29 @@
       white-space: nowrap;
     }
 
+    .zoom-controls {
+      position: fixed;
+      right: 16px;
+      bottom: 24px;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .zoom-controls button {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.12);
+      color: white;
+      font-size: 1.4rem;
+      font-weight: 800;
+      backdrop-filter: blur(10px);
+    }
+
+
     .debug {
       position: fixed;
       right: 14px;
@@ -231,19 +254,24 @@
   </div>
 
   <div class="hint">Wähle einen Stern <3</div>
-  <div class="debug" id="debug"></div>
+  <div class="zoom-controls">
+  <button id="zoomIn">+</button>
+  <button id="zoomOut">−</button>
+  </div>
 
   <script>
     const canvas = document.getElementById("sky");
     const ctx = canvas.getContext("2d");
     const links = document.querySelectorAll(".year-link");
-    const debug = document.getElementById("debug");
 
     let stars = [];
     let time = 0;
 
     let cameraX = 0;
     let cameraY = 0;
+    let zoom = 1;
+    const minZoom = 0.45;
+    const maxZoom = 1.8;
 
     let isDragging = false;
     let startX = 0;
@@ -291,8 +319,8 @@
 
     function worldToScreen(x, y) {
       return {
-        x: window.innerWidth / 2 + x + cameraX,
-        y: window.innerHeight / 2 + y + cameraY
+        x: window.innerWidth / 2 + (x + cameraX) * zoom,
+        y: window.innerHeight / 2 + (y + cameraY) * zoom
       };
     }
 
@@ -304,9 +332,9 @@
 
         link.style.left = `${screen.x}px`;
         link.style.top = `${screen.y}px`;
+        link.style.transform = `translate(-50%, -50%) scale(${zoom})`;
       });
 
-      debug.textContent = `cameraX: ${Math.round(cameraX)} · cameraY: ${Math.round(cameraY)}`;
     }
 
     function drawStars() {
@@ -415,6 +443,14 @@
     });
 
     window.addEventListener("resize", resize);
+
+    document.getElementById("zoomIn").addEventListener("click", () => {
+      zoom = Math.min(maxZoom, zoom + 0.15);
+    });
+
+    document.getElementById("zoomOut").addEventListener("click", () => {
+      zoom = Math.max(minZoom, zoom - 0.15);
+    });
 
     resize();
     animate();
