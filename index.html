@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>2 Jahre wir</title>
+
+  <title>Dragbares Universum Test</title>
+
   <style>
     * {
       box-sizing: border-box;
@@ -16,6 +18,12 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: radial-gradient(circle at 50% 20%, #26345e 0%, #10182f 44%, #050713 100%);
       color: white;
+      cursor: grab;
+      user-select: none;
+    }
+
+    body.dragging {
+      cursor: grabbing;
     }
 
     canvas {
@@ -24,6 +32,15 @@
       width: 100vw;
       height: 100vh;
       display: block;
+    }
+
+    .glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 30% 50%, rgba(255,214,231,.12), transparent 28%),
+        radial-gradient(circle at 70% 55%, rgba(160,190,255,.12), transparent 30%);
     }
 
     .intro {
@@ -69,6 +86,7 @@
       color: white;
       text-align: center;
       -webkit-tap-highlight-color: transparent;
+      touch-action: none;
     }
 
     .star {
@@ -76,18 +94,41 @@
       height: 74px;
       border-radius: 50%;
       margin: 0 auto 12px;
-      background: radial-gradient(circle, #fff8c7 0%, #ffd6e7 30%, rgba(255,214,231,.24) 54%, rgba(255,214,231,0) 72%);
-      box-shadow: 0 0 32px rgba(255,214,231,.85), 0 0 90px rgba(255,214,231,.35);
+      background: radial-gradient(
+        circle,
+        #fff8c7 0%,
+        #ffd6e7 30%,
+        rgba(255,214,231,.24) 54%,
+        rgba(255,214,231,0) 72%
+      );
+      box-shadow:
+        0 0 32px rgba(255,214,231,.85),
+        0 0 90px rgba(255,214,231,.35);
       animation: pulse 2.4s ease-in-out infinite alternate;
     }
 
-    .year-link:nth-of-type(2) .star {
-      animation-delay: .5s;
+    .year-link:nth-child(2) .star {
+      animation-delay: .4s;
+    }
+
+    .year-link:nth-child(3) .star {
+      animation-delay: .8s;
+    }
+
+    .year-link:nth-child(4) .star {
+      animation-delay: 1.2s;
     }
 
     @keyframes pulse {
-      from { transform: scale(.92); opacity: .78; }
-      to { transform: scale(1.08); opacity: 1; }
+      from {
+        transform: scale(.92);
+        opacity: .78;
+      }
+
+      to {
+        transform: scale(1.08);
+        opacity: 1;
+      }
     }
 
     .label {
@@ -97,6 +138,7 @@
       padding: 10px 16px;
       backdrop-filter: blur(10px);
       box-shadow: 0 14px 50px rgba(0,0,0,.28);
+      min-width: 130px;
     }
 
     .label strong {
@@ -125,28 +167,24 @@
       font-size: .9rem;
       backdrop-filter: blur(10px);
       pointer-events: none;
+      white-space: nowrap;
     }
 
-    .glow {
+    .debug {
       position: fixed;
-      inset: 0;
+      right: 14px;
+      bottom: 14px;
+      z-index: 20;
+      font-size: .75rem;
+      color: rgba(255,255,255,.55);
+      background: rgba(0,0,0,.25);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 12px;
+      padding: 8px 10px;
       pointer-events: none;
-      background:
-        radial-gradient(circle at 28% 52%, rgba(255,214,231,.15), transparent 28%),
-        radial-gradient(circle at 72% 52%, rgba(160,190,255,.14), transparent 30%);
     }
 
     @media (max-width: 600px) {
-      .year-link.jahr1 {
-        left: 30%;
-        top: 55%;
-      }
-
-      .year-link.jahr2 {
-        left: 70%;
-        top: 55%;
-      }
-
       .star {
         width: 62px;
         height: 62px;
@@ -154,103 +192,230 @@
 
       .label {
         padding: 9px 13px;
-      }
-    }
-
-    @media (min-width: 601px) {
-      .year-link.jahr1 {
-        left: 38%;
-        top: 55%;
-      }
-
-      .year-link.jahr2 {
-        left: 62%;
-        top: 55%;
+        min-width: 116px;
       }
     }
   </style>
 </head>
+
 <body>
   <canvas id="sky"></canvas>
   <div class="glow"></div>
 
   <header class="intro">
-    <div class="small">Unsere Sternenkarte</div>
-    <h1>Unsere Timeline</h1>
+    <div class="small">Miles & Marie</div>
+    <h1>Unser Universum</h1>
   </header>
 
-  <a class="year-link jahr1" href="jahr1.html" aria-label="Jahr 1 öffnen">
-    <div class="star"></div>
-    <div class="label">
-      <strong>Jahr 1</strong>
-    </div>
-  </a>
+  <div id="universe">
+    <a class="year-link" href="jahr1.html" data-x="-260" data-y="0">
+      <div class="star"></div>
+      <div class="label">
+        <strong>Jahr 1</strong>
+      </div>
+    </a>
 
-  <a class="year-link jahr2" href="jahr2.html" aria-label="Jahr 2 öffnen">
-    <div class="star"></div>
-    <div class="label">
-      <strong>Jahr 2</strong>
-    </div>
-  </a>
+    <a class="year-link" href="jahr2.html" data-x="260" data-y="0">
+      <div class="star"></div>
+      <div class="label">
+        <strong>Jahr 2</strong>
+      </div>
+    </a>
 
-  <div class="hint">Wähle einen Stern</div>
+    <a class="year-link" href="jahr3.html" data-x="680" data-y="-260">
+      <div class="star"></div>
+      <div class="label">
+        <strong>Jahr 3</strong>
+      </div>
+    </a>
+  </div>
+
+  <div class="hint">Wähle einen Stern <3</div>
+  <div class="debug" id="debug"></div>
 
   <script>
     const canvas = document.getElementById("sky");
     const ctx = canvas.getContext("2d");
+    const links = document.querySelectorAll(".year-link");
+    const debug = document.getElementById("debug");
 
     let stars = [];
-    let width = 0;
-    let height = 0;
     let time = 0;
 
+    let cameraX = 0;
+    let cameraY = 0;
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let dragStartCameraX = 0;
+    let dragStartCameraY = 0;
+    let moved = false;
+
+    const universeBounds = {
+      minX: -1200,
+      maxX: 1200,
+      minY: -900,
+      maxY: 900
+    };
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
     function resize() {
-      width = canvas.width = window.innerWidth * window.devicePixelRatio;
-      height = canvas.height = window.innerHeight * window.devicePixelRatio;
+      canvas.width = window.innerWidth * window.devicePixelRatio;
+      canvas.height = window.innerHeight * window.devicePixelRatio;
       canvas.style.width = window.innerWidth + "px";
       canvas.style.height = window.innerHeight + "px";
-      ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
 
-      stars = Array.from({ length: 150 }, () => ({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        r: Math.random() * 1.3 + 0.25,
+      ctx.setTransform(
+        window.devicePixelRatio,
+        0,
+        0,
+        window.devicePixelRatio,
+        0,
+        0
+      );
+
+      stars = Array.from({ length: 260 }, () => ({
+        x: Math.random() * (universeBounds.maxX - universeBounds.minX) + universeBounds.minX,
+        y: Math.random() * (universeBounds.maxY - universeBounds.minY) + universeBounds.minY,
+        r: Math.random() * 1.4 + 0.25,
         a: Math.random() * .8 + .2,
         speed: Math.random() * .018 + .006
       }));
+
+      updateUniverse();
     }
 
-    function drawLineBetweenMainStars() {
-      const isMobile = window.innerWidth <= 600;
-      const y = window.innerHeight * 0.55;
-      const x1 = window.innerWidth * (isMobile ? 0.30 : 0.38);
-      const x2 = window.innerWidth * (isMobile ? 0.70 : 0.62);
+    function worldToScreen(x, y) {
+      return {
+        x: window.innerWidth / 2 + x + cameraX,
+        y: window.innerHeight / 2 + y + cameraY
+      };
+    }
+
+    function updateUniverse() {
+      links.forEach(link => {
+        const x = Number(link.dataset.x);
+        const y = Number(link.dataset.y);
+        const screen = worldToScreen(x, y);
+
+        link.style.left = `${screen.x}px`;
+        link.style.top = `${screen.y}px`;
+      });
+
+      debug.textContent = `cameraX: ${Math.round(cameraX)} · cameraY: ${Math.round(cameraY)}`;
+    }
+
+    function drawStars() {
+      for (const star of stars) {
+        const screen = worldToScreen(star.x, star.y);
+
+        if (
+          screen.x < -50 ||
+          screen.x > window.innerWidth + 50 ||
+          screen.y < -50 ||
+          screen.y > window.innerHeight + 50
+        ) {
+          continue;
+        }
+
+        const alpha = star.a + Math.sin(time * star.speed) * .24;
+
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(255,255,255,${Math.max(.12, alpha)})`;
+        ctx.arc(screen.x, screen.y, star.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function drawConnections() {
+      const points = Array.from(links).map(link => ({
+        x: Number(link.dataset.x),
+        y: Number(link.dataset.y)
+      }));
 
       ctx.beginPath();
-      ctx.strokeStyle = "rgba(255, 214, 231, 0.28)";
-      ctx.lineWidth = 1.3;
-      ctx.moveTo(x1, y);
-      ctx.lineTo(x2, y);
+      ctx.strokeStyle = "rgba(255, 214, 231, 0.24)";
+      ctx.lineWidth = 1.2;
+
+      points.forEach((point, index) => {
+        const screen = worldToScreen(point.x, point.y);
+
+        if (index === 0) {
+          ctx.moveTo(screen.x, screen.y);
+        } else {
+          ctx.lineTo(screen.x, screen.y);
+        }
+      });
+
       ctx.stroke();
     }
 
     function animate() {
       time++;
+
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-      for (const star of stars) {
-        const alpha = star.a + Math.sin(time * star.speed) * .24;
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(255,255,255,${Math.max(.12, alpha)})`;
-        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      drawStars();
+      drawConnections();
+      updateUniverse();
 
-      drawLineBetweenMainStars();
       requestAnimationFrame(animate);
     }
 
+    function pointerDown(event) {
+      isDragging = true;
+      moved = false;
+
+      document.body.classList.add("dragging");
+
+      startX = event.clientX;
+      startY = event.clientY;
+
+      dragStartCameraX = cameraX;
+      dragStartCameraY = cameraY;
+    }
+
+    function pointerMove(event) {
+      if (!isDragging) return;
+
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+
+      if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+        moved = true;
+      }
+
+      cameraX = dragStartCameraX + dx;
+      cameraY = dragStartCameraY + dy;
+
+      cameraX = clamp(cameraX, -900, 900);
+      cameraY = clamp(cameraY, -700, 700);
+    }
+
+    function pointerUp() {
+      isDragging = false;
+      document.body.classList.remove("dragging");
+    }
+
+    document.addEventListener("pointerdown", pointerDown);
+    document.addEventListener("pointermove", pointerMove);
+    document.addEventListener("pointerup", pointerUp);
+    document.addEventListener("pointercancel", pointerUp);
+
+    links.forEach(link => {
+      link.addEventListener("click", event => {
+        if (moved) {
+          event.preventDefault();
+        }
+      });
+    });
+
     window.addEventListener("resize", resize);
+
     resize();
     animate();
   </script>

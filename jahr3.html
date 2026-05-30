@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jahr 3</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #17111f, #2a1735 46%, #0e0b16);
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .back {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 10;
+      color: white;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.16);
+      padding: 10px 14px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero {
+      min-height: 20vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 22px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.12) 0 1px, transparent 2px),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,0.16) 0 1px, transparent 2px),
+        radial-gradient(circle at 50% 70%, rgba(255,255,255,0.10) 0 1px, transparent 2px);
+      background-size: 120px 120px, 180px 180px, 140px 140px;
+      opacity: .75;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+    }
+
+    .eyebrow {
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #ffd6e7;
+      font-size: .78rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 12vw, 6rem);
+      line-height: .92;
+      margin: 0 0 24px;
+    }
+
+    .hero h2 {
+      font-size: clamp(1.4rem, 5vw, 2.4rem);
+      margin: 0 0 26px;
+    }
+
+    .hero p {
+      font-size: clamp(1.05rem, 4vw, 1.45rem);
+      line-height: 1.6;
+      color: rgba(255,255,255,.82);
+      margin: 0 auto 10px;
+    }
+
+    .timeline {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 40px;
+      bottom: 80px;
+      left: 31px;
+      width: 2px;
+      background: linear-gradient(#ffd6e7, rgba(255,255,255,.08));
+    }
+
+    .moment {
+      position: relative;
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 18px;
+      margin-bottom: 28px;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: all .7s ease;
+    }
+
+    .moment.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ffd6e7;
+      box-shadow: 0 0 0 7px rgba(255,214,231,.12), 0 0 28px rgba(255,214,231,.7);
+      margin-top: 22px;
+      z-index: 1;
+    }
+
+    .card {
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 24px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 24px 80px rgba(0,0,0,.24);
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: rgba(255,255,255,.08);
+    }
+
+    .card-content {
+      padding: 18px 20px 20px;
+    }
+
+    .date {
+      color: #ffd6e7;
+      font-weight: 800;
+      font-size: .9rem;
+      margin-bottom: 8px;
+    }
+
+    .memory-text p {
+      margin: 0 0 10px;
+      color: rgba(255,255,255,.84);
+      line-height: 1.55;
+      font-size: 1rem;
+    }
+
+    .memory-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (min-width: 760px) {
+      .timeline::before {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .moment {
+        grid-template-columns: 1fr 32px 1fr;
+        gap: 24px;
+      }
+
+      .moment:nth-child(odd) .card {
+        grid-column: 1;
+      }
+
+      .moment:nth-child(odd) .dot {
+        grid-column: 2;
+      }
+
+      .moment:nth-child(even) .dot {
+        grid-column: 2;
+      }
+
+      .moment:nth-child(even) .card {
+        grid-column: 3;
+      }
+
+      .dot {
+        margin-left: 4px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="back" href="index.html">← Sternenkarte</a>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="eyebrow">Jahr 3</div>
+      
+      
+    </div>
+  </section>
+
+  <main class="timeline">
+    
+  </main>
+
+  <script>
+    const moments = document.querySelectorAll(".moment");
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, { threshold: 0.15 });
+
+    moments.forEach(moment => observer.observe(moment));
+  </script>
+</body>
+</html>

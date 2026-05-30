@@ -160,7 +160,7 @@ def timeline_generieren(jahresordner):
     }}
 
     .hero {{
-      min-height: 70vh;
+      min-height: 20vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -335,8 +335,7 @@ def timeline_generieren(jahresordner):
 
   <section class="hero">
     <div class="hero-content">
-      <div class="eyebrow">Unser Jahr {jahr_nummer}</div>
-      <h1>Jahr {jahr_nummer}</h1>
+      <div class="eyebrow">Jahr {jahr_nummer}</div>
       {zeitraum_html}
       {intro_text_html}
     </div>
